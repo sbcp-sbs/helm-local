@@ -45,7 +45,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: _dist/helm-${{ github.ref_name }}-*
-          token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          token: "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"
 
       - name: Set latest version
         run: |
