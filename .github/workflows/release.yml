@@ -51,7 +51,7 @@ jobs:
           mkdir -p _dist_versions
 
           # Push the latest semver tag, excluding prerelease tags
-          LATEST_VERSION="$(git tag | sort -r --version-sort | grep '^v[0-9]' | grep -v '-' | head -n1)"
+          LATEST_VERSION="$(git tag | sort -r --version-sort | grep '^v[0-9]' | head -n1)"
           echo "LATEST_VERSION=${LATEST_VERSION}"
           echo "${LATEST_VERSION}" > _dist_versions/helm-latest-version
           echo "${LATEST_VERSION}" > _dist_versions/helm3-latest-version
