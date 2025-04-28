@@ -7,7 +7,9 @@ on:
     branches:
       - main
 
-permissions: read-all
+#permissions: read-all
+permissions:
+  contents: write
 
 # Note the only differences between release and canary-release jobs are:
 # - only canary passes --overwrite flag
@@ -43,6 +45,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: _dist/helm-${{ github.ref_name }}-*
+          token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
 
       - name: Set latest version
         run: |
