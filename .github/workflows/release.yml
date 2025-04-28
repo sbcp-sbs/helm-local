@@ -7,7 +7,7 @@ on:
     branches:
       - main
 
-permissions: read-all
+#permissions: read-all
 
 # Note the only differences between release and canary-release jobs are:
 # - only canary passes --overwrite flag
@@ -39,6 +39,11 @@ jobs:
           make build-cross VERSION="${{ github.ref_name }}"
           make dist checksum VERSION="${{ github.ref_name }}"
       
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: _dist/helm-${{ github.ref_name }}-*
+
       - name: Set latest version
         run: |
           set -eu -o pipefail
