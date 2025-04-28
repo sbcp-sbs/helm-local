@@ -7,9 +7,7 @@ on:
     branches:
       - main
 
-#permissions: read-all
-permissions:
-  contents: write
+permissions: read-all
 
 # Note the only differences between release and canary-release jobs are:
 # - only canary passes --overwrite flag
@@ -41,17 +39,17 @@ jobs:
           make build-cross VERSION="${{ github.ref_name }}"
           make dist checksum VERSION="${{ github.ref_name }}"
       
-      - name: Set latest version
-        run: |
-          set -eu -o pipefail
+      # - name: Set latest version
+      #   run: |
+      #     set -eu -o pipefail
 
-          mkdir -p _dist_versions
+      #     mkdir -p _dist_versions
 
-          # Push the latest semver tag, excluding prerelease tags
-          LATEST_VERSION="$(git tag | sort -r --version-sort | grep '^v[0-9]' | grep -v '-' | head -n1)"
-          echo "LATEST_VERSION=${LATEST_VERSION}"
-          echo "${LATEST_VERSION}" > _dist_versions/helm-latest-version
-          echo "${LATEST_VERSION}" > _dist_versions/helm3-latest-version
+      #     # Push the latest semver tag, excluding prerelease tags
+      #     LATEST_VERSION="$(git tag | sort -r --version-sort | grep '^v[0-9]' | grep -v '-' | head -n1)"
+      #     echo "LATEST_VERSION=${LATEST_VERSION}"
+      #     echo "${LATEST_VERSION}" > _dist_versions/helm-latest-version
+      #     echo "${LATEST_VERSION}" > _dist_versions/helm3-latest-version
 
       - name: Upload Binaries
         uses: bacongobbler/azure-blob-storage-upload@50f7d898b7697e864130ea04c303ca38b5751c50 # pin@3.0.0
