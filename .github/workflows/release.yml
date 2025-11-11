@@ -7,7 +7,7 @@ on:
     branches:
       - main
 
-permissions: read-all
+#permissions: read-all
 
 # Note the only differences between release and canary-release jobs are:
 # - only canary passes --overwrite flag
@@ -42,6 +42,11 @@ jobs:
           make build-cross VERSION="${{ github.ref_name }}"
           make dist checksum VERSION="${{ github.ref_name }}"
 
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: _dist/helm-${{ github.ref_name }}-*
+
       - name: Set latest version
         run: |
           set -eu -o pipefail
@@ -49,7 +54,7 @@ jobs:
           mkdir -p _dist_versions
 
           # Push the latest semver tag, excluding prerelease tags
-          LATEST_VERSION="$(git tag | sort -r --version-sort | grep '^v[0-9]' | grep -v '-' | head -n1)"
+          LATEST_VERSION="$(git tag | sort -r --version-sort | grep '^v[0-9]' | head -n1)"
           echo "LATEST_VERSION=${LATEST_VERSION}"
           echo "${LATEST_VERSION}" > _dist_versions/helm-latest-version
           echo "${LATEST_VERSION}" > _dist_versions/helm3-latest-version
