@@ -19,7 +19,6 @@ package util
 import (
 	"fmt"
 	"log"
-	"maps"
 
 	"helm.sh/helm/v4/internal/copystructure"
 	chart "helm.sh/helm/v4/pkg/chart"
@@ -160,7 +159,8 @@ func coalesceGlobals(printf printFn, dest, src map[string]interface{}, prefix st
 	// tables in globals.
 	for key, val := range sg {
 		if istable(val) {
-			vv := copyMap(val.(map[string]interface{}))
+			valCopy, _ := copystructure.Copy(val)
+			vv := valCopy.(map[string]interface{})
 			if destv, ok := dg[key]; !ok {
 				// Here there is no merge. We're just adding.
 				dg[key] = vv
@@ -189,11 +189,6 @@ func coalesceGlobals(printf printFn, dest, src map[string]interface{}, prefix st
 	dest[common.GlobalKey] = dg
 }
 
-func copyMap(src map[string]interface{}) map[string]interface{} {
-	m := make(map[string]interface{}, len(src))
-	maps.Copy(m, src)
-	return m
-}
 
 // coalesceValues builds up a values map for a particular chart.
 //
